@@ -9,6 +9,9 @@ import { fileURLToPath } from 'node:url'
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
 
 export default defineConfig({
+  // Required for GitHub Pages project deployment
+  base: '/Always_Us/',
+
   plugins: [
     react(),
     tailwindcss(),
@@ -17,7 +20,7 @@ export default defineConfig({
       includeAssets: [
         'favicon.ico',
         'apple-touch-icon.png',
-        'masked-icon.svg'
+        'masked-icon.svg',
       ],
       manifest: {
         name: 'Always Us',
@@ -31,45 +34,44 @@ export default defineConfig({
           {
             src: 'pwa-192x192.png',
             sizes: '192x192',
-            type: 'image/png'
+            type: 'image/png',
           },
           {
             src: 'pwa-512x512.png',
             sizes: '512x512',
             type: 'image/png',
-            purpose: 'any maskable'
-          }
-        ]
+            purpose: 'any maskable',
+          },
+        ],
       },
       workbox: {
-        // Never cache private API responses.
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
         runtimeCaching: [],
-        navigateFallback: '/index.html',
-        navigateFallbackDenylist: [/^\/api/]
-      }
-    })
+        navigateFallback: '/Always_Us/index.html',
+        navigateFallbackDenylist: [/^\/api/],
+      },
+    }),
   ],
 
   resolve: {
     alias: {
-      '@': path.resolve(currentDir, './src')
-    }
+      '@': path.resolve(currentDir, './src'),
+    },
   },
 
   server: {
     proxy: {
       '/api': {
         target: 'http://localhost:8000',
-        changeOrigin: true
-      }
-    }
+        changeOrigin: true,
+      },
+    },
   },
 
   test: {
     globals: true,
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.ts'],
-    css: true
-  }
+    css: true,
+  },
 })
